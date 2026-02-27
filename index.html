@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="LocHub - Equipamentos e serviços para eventos">
+    <title>LocHub - Equipamentos para Eventos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">LocHub</div>
+                <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <nav class="main-nav">
+                    <a href="#sobre">Sobre</a>
+                    <a href="#servicos">Serviços</a>
+                    <a href="#solucoes">Soluções</a>
+                    <a href="#clientes">Clientes</a>
+                    <a href="#contato">Contato</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="banner-section">
+        <img src="img/central.png" alt="LocHub - Equipamentos para Eventos" class="banner-image" loading="lazy" decoding="async">
+    </section>
+
+    <div class="hero">
+        <div class="container">
+            <h1>Equipamentos e Serviços para Seu Evento</h1>
+            <p>Estruturas, tendas, pórticos e muito mais para o sucesso de seu evento</p>
+            <a href="#contato" class="btn">Solicitar Orçamento</a>
+        </div>
+    </div>
+
+    <section id="sobre" class="container">
+        <h2>Quem é a LocHub?</h2>
+        <p>Nascemos com um DNA de encarar desafios e propor soluções aos nossos clientes.</p>
+        <p style="margin-top: 1rem;">Somos especializados em locação de equipamentos e na prestação de serviços personalizados, de acordo com a necessidade de cada cliente.</p>
+        <p style="margin-top: 1rem;">A LocHub possui estrutura própria e profissionais especializados, garantindo atendimento rápido e com qualidade.</p>
+        <p style="margin-top: 1rem; font-style: italic; color: #1a73e8;">Vamos juntos realizar seu sonho!</p>
+        
+        <div class="gallery-buttons">
+            <div class="gallery-thumb" onclick="openModal('img/Quem_somos_1.png', 'LocHub - Quem Somos 1')">
+                <img src="img/Quem_somos_1.png" alt="LocHub - Quem Somos 1" loading="lazy">
+                <div class="gallery-thumb-overlay">
+                    <span class="gallery-thumb-text">🔍</span>
+                </div>
+            </div>
+            <div class="gallery-thumb" onclick="openModal('img/Quem_somos_2.png', 'LocHub - Quem Somos 2')">
+                <img src="img/Quem_somos_2.png" alt="LocHub - Quem Somos 2" loading="lazy">
+                <div class="gallery-thumb-overlay">
+                    <span class="gallery-thumb-text">🔍</span>
+                </div>
+            </div>
+            <div class="gallery-thumb" onclick="openModal('img/Quem_somos_3.png', 'LocHub - Quem Somos 3')">
+                <img src="img/Quem_somos_3.png" alt="LocHub - Quem Somos 3" loading="lazy">
+                <div class="gallery-thumb-overlay">
+                    <span class="gallery-thumb-text">🔍</span>
+                </div>
+            </div>
+            <div class="gallery-thumb" onclick="openModal('img/Quem_somos_4.png', 'LocHub - Quem Somos 4')">
+                <img src="img/Quem_somos_4.png" alt="LocHub - Quem Somos 4" loading="lazy">
+                <div class="gallery-thumb-overlay">
+                    <span class="gallery-thumb-text">🔍</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="carousel-container">
+        <div class="container">
+            <h2 class="carousel-title">O Que Fazemos</h2>
+            <p class="carousel-subtitle">
+                <span class="subtitle-desktop">
+                    Projetos de acordo com a sua necessidade, para todos os eventos, de todos os portes e segmentos.
+                </span>
+                <span class="subtitle-mobile">
+                    Projetos de acordo com a sua necessidade,<br>
+                    para todos os eventos, de todos os portes e segmentos.
+                </span>
+            </p>
+
+            <div class="carousel">
+                <div class="carousel-inner" id="carouselInner">
+                    <div class="carousel-item">
+                        <img src="img/backdrops.png" alt="Backdrops" loading="lazy">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/Estruturas.png" alt="Estruturas Completas" loading="lazy">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/palcos.png" alt="Palcos" loading="lazy">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/podios.png" alt="Pódios" loading="lazy">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/porticos.png" alt="Pórticos" loading="lazy">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/porticosbox.png" alt="Pórticos em Box" loading="lazy">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/porticosboxq15.png" alt="Pórticos em Boxtruss Q15" loading="lazy">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/tendas.png" alt="Tendas em Boxtruss" loading="lazy">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="img/tendaspiramidais.png" alt="Tendas Piramidais" loading="lazy">
+                    </div>
+                </div>
+                <button class="carousel-prev" onclick="carouselPrev()">&#10094;</button>
+                <button class="carousel-next" onclick="carouselNext()">&#10095;</button>
+                <div class="carousel-dots" id="carouselDots"></div>
+            </div>
+        </div>
+    </div>
+
+    <section id="servicos" class="container">
+        <div class="grid">
+            <div class="card">
+                <h3>Pórticos em Boxtruss</h3>
+                <p>Estruturas Q15 e Q30 para qualquer tipo de evento</p>
+            </div>
+            <div class="card">
+                <h3>Estruturas Completas</h3>
+                <p>Soluções modulares e personalizadas</p>
+            </div>
+            <div class="card">
+                <h3>Pódios</h3>
+                <p>Plataformas em praticáveis de alta qualidade</p>
+            </div>
+            <div class="card">
+                <h3>Backdrops</h3>
+                <p>Painéis customizados para branding</p>
+            </div>
+            <div class="card">
+                <h3>Pórticos Envelopados</h3>
+                <p>Estruturas com acabamento especial</p>
+            </div>
+            <div class="card">
+                <h3>Tendas em Boxtruss</h3>
+                <p>Tendas e pirâmides estruturadas</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="solucoes" class="container">
+        <h2>Nossas Soluções</h2>
+        <p style="margin-bottom: 2rem;">Estruturas em boxtruss, palcos, pórticos, backdrops, grades e muitos outros itens no nosso catálogo com atendimento em todo o Brasil.</p>
+        
+        <div class="services">
+            <div class="service-item">
+                <h3>Totem Metalon</h3>
+                <p>Estruturas em metalon para sinalização e branding</p>
+            </div>
+            <div class="service-item">
+                <h3>Grades Metálicas e Plásticas</h3>
+                <p>Controle de fluxo e segurança</p>
+            </div>
+            <div class="service-item">
+                <h3>Bebedouros Industriais</h3>
+                <p>Hidratação para eventos de grande escala</p>
+            </div>
+            <div class="service-item">
+                <h3>Backdrops Customizados</h3>
+                <p>Painéis personalizados com suas cores e logo</p>
+            </div>
+            <div class="service-item">
+                <h3>Palcos em Boxtruss</h3>
+                <p>Estruturas elevadas e seguras</p>
+            </div>
+            <div class="service-item">
+                <h3>Unifilas</h3>
+                <p>Organização de filas e controle de acesso</p>
+            </div>
+        </div>
+
+        <div style="margin-top: 2rem;">
+            <a href="https://lochub.log.br/wp-content/uploads/2024/08/Loc_Hub_catalogo_2024.pdf" class="btn">📥 Baixar Catálogo Completo</a>
+        </div>
+    </section>
+
+    <section id="clientes" class="container">
+        <h2>Nossos Principais Clientes</h2>
+        <div class="clients-grid">
+            <div class="client-logo">Maratona do Rio</div>
+            <div class="client-logo">Speed</div>
+            <div class="client-logo">Dream Tour</div>
+            <div class="client-logo">xTerra</div>
+            <div class="client-logo">WTR</div>
+            <div class="client-logo">Vivere</div>
+            <div class="client-logo">Sertões</div>
+            <div class="client-logo">Natal da Lagoa</div>
+            <div class="client-logo">Manifest</div>
+            <div class="client-logo">Art Rio</div>
+            <div class="client-logo">Mano a Mano</div>
+            <div class="client-logo">Maratoninha do Rio</div>
+        </div>
+    </section>
+
+    <div id="contato" class="contact-hero">
+        <div class="container">
+            <h2>Fale Conosco</h2>
+            <p style="margin-bottom: 2rem;">Estamos prontos para te ajudar. Entre em contato e descubra nossas soluções!</p>
+            
+            <div class="contact-info">
+                <p>📧 <a href="mailto:atendimento@lochub.log.br">atendimento@lochub.log.br</a></p>
+                <p>📱 <a href="https://api.whatsapp.com/send/?phone=5521973578746&text&type=phone_number&app_absent=0">+55 21 97357-8746 (WhatsApp)</a></p>
+            </div>
+
+            <div class="social-links">
+                <a href="https://www.instagram.com/lochub_eventos/" target="_blank">Instagram</a>
+                <a href="https://www.linkedin.com/company/lochub/about/" target="_blank">LinkedIn</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Copyright © 2026 LocHub | Equipamentos para Eventos</p>
+    </footer>
+
+    <!-- Modal para Galeria -->
+    <div id="photoModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <img id="modalImage" class="modal-image" src="" alt="">
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
