@@ -26,103 +26,193 @@ window.onclick = function(event) {
     }
 }
 
-// Funções do Carrossel (responsivo: 1 item no mobile, 2 no desktop)
-let currentPage = 0;
-let slides = [];
-let totalItems = 0;
-let itemsPerView = 1;
-let totalPages = 0;
-let autoplayTimer;
+// Funções do Carrossel (responsivo: 1 item no mobile, 2 no desktop) – suporta múltiplos carrosséis
+const carouselState = {};
 
 function getItemsPerView() {
     return window.innerWidth > 768 ? 2 : 1;
 }
 
-function setupCarouselVariables() {
-    slides = Array.from(document.querySelectorAll('.carousel-item'));
-    totalItems = slides.length;
-    itemsPerView = getItemsPerView();
-    totalPages = Math.max(1, Math.ceil(totalItems / itemsPerView));
+function getCarouselIds(key) {
+    return key === 'main'
+        ? { inner: 'carouselInner', dots: 'carouselDots' }
+        : { inner: 'carouselSolucoesInner', dots: 'carouselSolucoesDots' };
 }
 
-function buildDots() {
-    const dotsContainer = document.getElementById('carouselDots');
-    if (!dotsContainer) return;
+function setupCarouselVariables(key) {
+    const ids = getCarouselIds(key);
+    const inner = document.getElementById(ids.inner);
+    if (!inner) return;
+    const slides = Array.from(inner.querySelectorAll('.carousel-item'));
+    const itemsPerView = getItemsPerView();
+    const totalPages = Math.max(1, Math.ceil(slides.length / itemsPerView));
+    carouselState[key] = {
+        currentPage: 0,
+        totalPages,
+        totalItems: slides.length,
+        itemsPerView,
+        autoplayTimer: null
+    };
+}
+
+function buildDots(key) {
+    const state = carouselState[key];
+    const ids = getCarouselIds(key);
+    const dotsContainer = document.getElementById(ids.dots);
+    if (!dotsContainer || !state) return;
 
     dotsContainer.innerHTML = '';
-    for (let i = 0; i < totalPages; i++) {
+    for (let i = 0; i < state.totalPages; i++) {
         const dot = document.createElement('button');
         dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-        dot.onclick = () => goToPage(i);
+        dot.onclick = () => goToPage(i, key);
         dotsContainer.appendChild(dot);
     }
 }
 
-function initCarousel() {
-    const carousel = document.getElementById('carouselInner');
-    const dotsContainer = document.getElementById('carouselDots');
-    if (!carousel || !dotsContainer) return;
+function updateCarousel(key) {
+    const state = carouselState[key];
+    const ids = getCarouselIds(key);
+    const carousel = document.getElementById(ids.inner);
+    const dotsContainer = document.getElementById(ids.dots);
+    if (!carousel || !state || !dotsContainer) return;
 
-    setupCarouselVariables();
-    currentPage = 0;
-    buildDots();
-    updateCarousel();
-    startAutoplay();
-
-    window.addEventListener('resize', handleCarouselResize);
-}
-
-function handleCarouselResize() {
-    const oldItemsPerView = itemsPerView;
-    const newItemsPerView = getItemsPerView();
-    if (oldItemsPerView === newItemsPerView) return;
-
-    setupCarouselVariables();
-    currentPage = 0;
-    buildDots();
-    updateCarousel();
-}
-
-function updateCarousel() {
-    const carousel = document.getElementById('carouselInner');
-    if (!carousel) return;
-
-    const offsetPercent = currentPage * 100;
+    const offsetPercent = state.currentPage * 100;
     carousel.style.transform = `translateX(-${offsetPercent}%)`;
 
-    const dots = document.querySelectorAll('.carousel-dot');
+    const dots = dotsContainer.querySelectorAll('.carousel-dot');
     dots.forEach((dot, index) => {
-        dot.classList.toggle('active', index === currentPage);
+        dot.classList.toggle('active', index === state.currentPage);
     });
 }
 
-function carouselNext() {
-    currentPage = (currentPage + 1) % totalPages;
-    updateCarousel();
-    resetAutoplay();
+function carouselNext(key) {
+    const state = carouselState[key];
+    if (!state) return;
+    state.currentPage = (state.currentPage + 1) % state.totalPages;
+    updateCarousel(key);
+    resetAutoplay(key);
 }
 
-function carouselPrev() {
-    currentPage = (currentPage - 1 + totalPages) % totalPages;
-    updateCarousel();
-    resetAutoplay();
+function carouselPrev(key) {
+    const state = carouselState[key];
+    if (!state) return;
+    state.currentPage = (state.currentPage - 1 + state.totalPages) % state.totalPages;
+    updateCarousel(key);
+    resetAutoplay(key);
 }
 
-function goToPage(index) {
-    currentPage = index;
-    updateCarousel();
-    resetAutoplay();
+function goToPage(index, key) {
+    const state = carouselState[key];
+    if (!state) return;
+    state.currentPage = index;
+    updateCarousel(key);
+    resetAutoplay(key);
 }
 
-function startAutoplay() {
-    if (totalPages <= 1) return;
-    autoplayTimer = setInterval(carouselNext, 5000);
+function startAutoplay(key) {
+    const state = carouselState[key];
+    if (!state || state.totalPages <= 1) return;
+    state.autoplayTimer = setInterval(() => carouselNext(key), 5000);
 }
 
-function resetAutoplay() {
-    if (!autoplayTimer) return;
-    clearInterval(autoplayTimer);
-    startAutoplay();
+function resetAutoplay(key) {
+    const state = carouselState[key];
+    if (!state || !state.autoplayTimer) return;
+    clearInterval(state.autoplayTimer);
+    startAutoplay(key);
+}
+
+function setupCarouselTouch(key) {
+    const ids = getCarouselIds(key);
+    const inner = document.getElementById(ids.inner);
+    if (!inner) return;
+    const wrapper = inner.closest('.carousel');
+    if (!wrapper) return;
+
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let isHorizontalDrag = null;
+
+    wrapper.addEventListener('touchstart', function (e) {
+        if (e.touches.length !== 1) return;
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        isHorizontalDrag = null;
+        inner.style.transition = 'none';
+    }, { passive: true });
+
+    wrapper.addEventListener('touchmove', function (e) {
+        if (e.touches.length !== 1) return;
+        const state = carouselState[key];
+        if (!state) return;
+        const curX = e.touches[0].clientX;
+        const curY = e.touches[0].clientY;
+        const deltaX = curX - touchStartX;
+        const deltaY = curY - touchStartY;
+
+        if (isHorizontalDrag === null) {
+            isHorizontalDrag = Math.abs(deltaX) > Math.abs(deltaY);
+        }
+        if (isHorizontalDrag) {
+            e.preventDefault();
+            const basePercent = state.currentPage * 100;
+            inner.style.transform = `translateX(calc(-${basePercent}% + ${deltaX}px))`;
+        }
+    }, { passive: false });
+
+    wrapper.addEventListener('touchend', function (e) {
+        const state = carouselState[key];
+        if (!state) return;
+        const touchEndX = e.changedTouches[0].clientX;
+        const deltaX = touchEndX - touchStartX;
+        const threshold = 50;
+        inner.style.transition = '';
+
+        if (deltaX < -threshold && state.currentPage < state.totalPages - 1) {
+            carouselNext(key);
+        } else if (deltaX > threshold && state.currentPage > 0) {
+            carouselPrev(key);
+        } else {
+            updateCarousel(key);
+        }
+    }, { passive: true });
+}
+
+function initCarouselForKey(key) {
+    const ids = getCarouselIds(key);
+    const carousel = document.getElementById(ids.inner);
+    const dotsContainer = document.getElementById(ids.dots);
+    if (!carousel || !dotsContainer) return;
+
+    setupCarouselVariables(key);
+    carouselState[key].currentPage = 0;
+    buildDots(key);
+    updateCarousel(key);
+    startAutoplay(key);
+    setupCarouselTouch(key);
+}
+
+function handleCarouselResize() {
+    const keys = ['main', 'solucoes'];
+    keys.forEach(key => {
+        if (!carouselState[key]) return;
+        const oldItemsPerView = carouselState[key].itemsPerView;
+        const newItemsPerView = getItemsPerView();
+        if (oldItemsPerView === newItemsPerView) return;
+        if (carouselState[key].autoplayTimer) clearInterval(carouselState[key].autoplayTimer);
+        setupCarouselVariables(key);
+        carouselState[key].currentPage = 0;
+        buildDots(key);
+        updateCarousel(key);
+        startAutoplay(key);
+    });
+}
+
+function initCarousel() {
+    initCarouselForKey('main');
+    initCarouselForKey('solucoes');
+    window.addEventListener('resize', handleCarouselResize);
 }
 
 // Menu hambúrguer (mobile)
