@@ -228,12 +228,31 @@ function initMobileMenu() {
         toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     });
 
+    const header = document.querySelector('header');
+    const getHeaderHeight = () => header ? header.offsetHeight : 0;
+
     nav.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
+        link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href');
+            if (!href || !href.startsWith('#')) return;
+
+            e.preventDefault();
+
+            const id = href.slice(1);
+            const target = document.getElementById(id);
+
             if (nav.classList.contains('is-open')) {
                 nav.classList.remove('is-open');
                 toggle.classList.remove('is-open');
                 toggle.setAttribute('aria-expanded', 'false');
+            }
+
+            if (target) {
+                setTimeout(() => {
+                    const top = target.getBoundingClientRect().top + window.scrollY - getHeaderHeight();
+                    window.scrollTo({ top, behavior: 'smooth' });
+                    history.pushState(null, '', href);
+                }, 400);
             }
         });
     });
