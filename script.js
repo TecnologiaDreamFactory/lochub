@@ -76,9 +76,11 @@ function updateCarousel(key) {
     const carousel = document.getElementById(ids.inner);
     const dotsContainer = document.getElementById(ids.dots);
     if (!carousel || !state || !dotsContainer) return;
+    const wrapper = carousel.closest('.carousel');
+    if (!wrapper) return;
 
-    const offsetPercent = state.currentPage * 100;
-    carousel.style.transform = `translateX(-${offsetPercent}%)`;
+    const offsetPx = state.currentPage * wrapper.clientWidth;
+    carousel.style.transform = `translate3d(-${offsetPx}px, 0, 0)`;
 
     const dots = dotsContainer.querySelectorAll('.carousel-dot');
     dots.forEach((dot, index) => {
@@ -156,8 +158,8 @@ function setupCarouselTouch(key) {
         }
         if (isHorizontalDrag) {
             e.preventDefault();
-            const basePercent = state.currentPage * 100;
-            inner.style.transform = `translateX(calc(-${basePercent}% + ${deltaX}px))`;
+            const baseOffset = state.currentPage * wrapper.clientWidth;
+            inner.style.transform = `translate3d(${deltaX - baseOffset}px, 0, 0)`;
         }
     }, { passive: false });
 
